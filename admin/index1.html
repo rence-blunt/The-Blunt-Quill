@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Feathers of Poetry</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Feathers of Poetry – Admin Panel</h1>
+    <button id="logout-btn">Logout</button>
+  </header>
+
+  <nav>
+    <button class="tab" data-tab="poem-of-day">Poem of the Day</button>
+    <button class="tab" data-tab="featured-poems">Featured Poems</button>
+    <button class="tab" data-tab="featured-poets">Featured Poets</button>
+    <button class="tab" data-tab="quotes">Quotes</button>
+    <button class="tab" data-tab="recent-poems">Recent Poems</button>
+  </nav>
+
+  <main>
+    <section id="poem-of-day" class="tab-section">
+      <h2>Poem of the Day</h2>
+      <textarea id="poem-day-text" placeholder="Enter today's poem..."></textarea>
+      <button onclick="savePoemOfDay()">Save</button>
+    </section>
+
+    <section id="featured-poems" class="tab-section">
+      <h2>Featured Poems</h2>
+      <input id="featured-title" placeholder="Title" />
+      <textarea id="featured-content" placeholder="Poem text..."></textarea>
+      <input id="featured-author" placeholder="Author" />
+      <button onclick="addFeaturedPoem()">Add</button>
+      <div id="featured-poems-list"></div>
+    </section>
+
+    <section id="featured-poets" class="tab-section">
+      <h2>Featured Poets</h2>
+      <input id="poet-name" placeholder="Poet's Name" />
+      <textarea id="poet-bio" placeholder="Short Bio..."></textarea>
+      <button onclick="addFeaturedPoet()">Add</button>
+      <div id="featured-poets-list"></div>
+    </section>
+
+    <section id="quotes" class="tab-section">
+      <h2>Quote of the Day</h2>
+      <textarea id="quote-text" placeholder="Enter Quote..."></textarea>
+      <button onclick="saveQuote()">Save</button>
+    </section>
+
+    <section id="recent-poems" class="tab-section">
+      <h2>Recent Poems</h2>
+      <input id="recent-title" placeholder="Title" />
+      <textarea id="recent-content" placeholder="Poem..." ></textarea>
+      <input id="recent-author" placeholder="Author" />
+      <button onclick="addRecentPoem()">Add</button>
+      <div id="recent-poems-list"></div>
+    </section>
+  </main>
+
+  <script src="firebase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

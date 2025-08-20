@@ -1,0 +1,161 @@
+<!-- SAVE AS: admin/update-quotes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Quotes – The Blunt Quill</title>
+  <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #f9f5f1;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #5a3928;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+
+    input {
+      height: 2.5rem;
+    }
+
+    button {
+      margin-top: 2rem;
+      display: block;
+      width: 100%;
+      background-color: #5c3a2c;
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #3e261c;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Quotes of the Day</h1>
+
+    <label for="quote1">Quote 1</label>
+    <textarea id="quote1"></textarea>
+
+    <label for="author1">Author 1</label>
+    <input id="author1" placeholder="e.g. — Max Mill" />
+
+    <label for="quote2">Quote 2</label>
+    <textarea id="quote2"></textarea>
+
+    <label for="author2">Author 2</label>
+    <input id="author2" placeholder="e.g. — Ava Nuru" />
+
+    <button id="saveBtn">Save Quotes</button>
+    <div id="status"></div>
+  </div>
+
+  <!-- Firebase + Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyApKv5coX5NUytvlRXbf4bHRxER1WddgGo",
+      authDomain: "the-blunt-quill.firebaseapp.com",
+      projectId: "the-blunt-quill",
+      storageBucket: "the-blunt-quill.appspot.com",
+      messagingSenderId: "781168538980",
+      appId: "1:781168538980:web:ac661a1bb8442be6a2379e"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const quote1 = document.getElementById('quote1');
+    const quote2 = document.getElementById('quote2');
+    const author1 = document.getElementById('author1');
+    const author2 = document.getElementById('author2');
+    const saveBtn = document.getElementById('saveBtn');
+    const status = document.getElementById('status');
+
+    const quotesDoc = doc(db, "HomeData", "QuotesOfTheDay");
+
+    async function loadQuotes() {
+      try {
+        const snap = await getDoc(quotesDoc);
+        if (snap.exists()) {
+          const data = snap.data();
+          quote1.value = data.q1 || '';
+          quote2.value = data.q2 || '';
+          author1.value = data.a1 || '';
+          author2.value = data.a2 || '';
+        }
+      } catch (err) {
+        status.textContent = "Failed to load quotes.";
+        status.style.color = "red";
+      }
+    }
+
+    saveBtn.addEventListener("click", async () => {
+      const q1 = quote1.value.trim();
+      const q2 = quote2.value.trim();
+      const a1 = author1.value.trim();
+      const a2 = author2.value.trim();
+
+      if (!q1 || !q2 || !a1 || !a2) {
+        status.textContent = "Please fill all fields.";
+        status.style.color = "red";
+        return;
+      }
+
+      try {
+        await setDoc(quotesDoc, { q1, q2, a1, a2 });
+        status.textContent = "Quotes updated successfully.";
+        status.style.color = "green";
+      } catch (e) {
+        status.textContent = "Failed to update quotes.";
+        status.style.color = "red";
+      }
+    });
+
+    loadQuotes();
+  </script>
+</body>
+</html>
